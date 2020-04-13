@@ -1,4 +1,12 @@
+# Twillio number: +12056512507
+# Twillio sccount SID: AC97bd57b9e522bd6907463b9f987a4000
+# Twillio auth token: 9f6007dcaffe2f9297fda61c4dba2d6d
+# Heroku url: https://limitless-island-02850.herokuapp.com
+
+
+
 require 'sinatra'
+require 'twilio-ruby'
 # require "sinatra/reloader" if development?
 
 
