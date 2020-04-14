@@ -161,6 +161,41 @@ get "/test/conversation" do
 	end
 end
 
+get "/sms/incoming" do
+  session["counter"] ||= 1
+  body = params[:Body] || ""
+  sender = params[:From] || ""
+
+  if session["counter"] == 1
+    message = "Thanks for your first message. From #{sender} saying #{body}"
+    media = "https://media.giphy.com/media/13ZHjidRzoi7n2/giphy.gif"
+  else
+    message = "Thanks for message number #{ session["counter"] }. From #{sender} saying #{body}"
+    media = nil
+  end
+
+  # Build a twilio response object
+  twiml = Twilio::TwiML::MessagingResponse.new do |r|
+    r.message do |m|
+
+      # add the text of the response
+      m.body( message )
+
+      # add media if it is defined
+      unless media.nil?
+        m.media( media )
+      end
+    end
+  end
+
+  # increment the session counter
+  session["counter"] += 1
+
+  # send a response to twilio
+  content_type 'text/xml'
+  twiml.to_s
+end
+
 get "/test/sms" do
 	client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
 	# Include a message here
@@ -175,9 +210,9 @@ get "/test/sms" do
 	"sent"
 end
 
-get "/test" do
-	ENV["TWILIO_FROM"]
-end
+# get "/test" do
+# 	ENV["TWILIO_FROM"]
+# end
 
 error 403 do
 	"Access Forbidden"
