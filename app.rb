@@ -16,6 +16,11 @@ greetings = ['Hey there','Greetings!', 'Welcome back!']
 timed_greetings = ['Good morning!','Good afternoon!','Good evening!' ]
 code = 'daaaniel'
 
+configure :development do
+  require 'dotenv'
+  Dotenv.load
+end
+
 def determine_response body
 	#customize response message according to user input
 
