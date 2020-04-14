@@ -166,14 +166,15 @@ get "/sms/incoming" do
   body = params[:Body] || ""
   sender = params[:From] || ""
 
-  # if session["counter"] == 1
-  #   message = "Thanks for your first message. From #{sender} saying #{body}"
-  #   media = "https://media.giphy.com/media/13ZHjidRzoi7n2/giphy.gif"
-  # else
+  if session["counter"] == 1
+    message = "Hi #{sender}, welcome to Personal Trainer Bot! I can respond to who, what, where, when and why. If you're stuck, type help."
+    media = "https://media.giphy.com/media/13ZHjidRzoi7n2/giphy.gif"
+  else
+		message = determine_response body
   #   message = "Thanks for message number #{ session["counter"] }. From #{sender} saying #{body}"
   #   media = nil
-  # end
-	message = determine_response body
+  end
+
   # Build a twilio response object
   twiml = Twilio::TwiML::MessagingResponse.new do |r|
     r.message do |m|
@@ -184,7 +185,7 @@ get "/sms/incoming" do
       # add media if it is defined
       # unless media.nil?
       #   m.media( media )
-      
+
     end
   end
 
