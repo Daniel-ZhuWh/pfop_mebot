@@ -166,7 +166,12 @@ get "/test/sms" do
 		from: ENV["TWILIO_FROM"],
 		to: "+14125096195",
 		body: message
-)
+	)
+	"sent"
+end
+
+get "/test" do
+	ENV["TWILIO_FROM"]
 end
 
 error 403 do
