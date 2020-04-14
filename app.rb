@@ -121,9 +121,19 @@ post "/signup" do
 	elsif params[:number].nil? || params[:first_name].nil?
 		"You didn't enter all of the input fields."
 	else
-		session['first_name'] = params['first_name']
-		session['number'] = params['number']
-		"Your first name is #{params[:first_name]}, your number is #{params[:number]}"
+		# session['first_name'] = params['first_name']
+		# session['number'] = params['number']
+		# "Your first name is #{params[:first_name]}, your number is #{params[:number]}"
+		client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+		# Include a message here
+	  message = "Hi" + params[:first_name] + ", welcome to Personal Trainer Bot! I can respond to who, what, where, when and why. If you're stuck, type help."
+
+	  # this will send a message from any end point
+	  client.api.account.messages.create(
+	    from: ENV["TWILIO_FROM"],
+	    to: params[:number],
+	    body: message
+  )
 	end
 end
 
@@ -144,6 +154,19 @@ get "/test/conversation" do
 	else
 		determine_response params[:Body]
 	end
+end
+
+get "/test/sms" do
+	client = Twilio::REST::Client.new ENV["TWILIO_ACCOUNT_SID"], ENV["TWILIO_AUTH_TOKEN"]
+	# Include a message here
+	message = "Hi, welcome to Personal Trainer Bot! I can respond to who, what, where, when and why. If you're stuck, type help."
+
+	# this will send a message from any end point
+	client.api.account.messages.create(
+		from: ENV["TWILIO_FROM"],
+		to: "+14125096195",
+		body: message
+)
 end
 
 error 403 do
